@@ -1,0 +1,35 @@
+/*********
+ *  stylesheet for osm_leaflet webpage 
+ *  Anna Goren <agoren@marlboro.edu>
+ *  October 2014 
+ *           
+ * 
+ ********/
+
+html { font-size: 100%; }   
+body {  
+  text-align: center;   
+  width: 900px;  
+  margin: 2em auto;
+  padding: 0;
+  background-color: white;
+} 
+
+#marlboro_map{
+  width: 700px;
+  height: 400px;
+  margin: 10px;
+  padding: 20px;
+  border: solid brown;
+  background-color: green;
+}
+
+#footer{ 
+  text-align: left;
+  margin: 10px;
+}
+
+.building-labels {
+    position: absolute;
+    background-color: white;
+}

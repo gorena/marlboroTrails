@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>OSM - Via Leaflet</title>
+  <!-- 
+  <script src='ol/OpenLayers.js'></script>
+  <script src='ol/OpenStreetMap.js'></script>
+  -->
+  <script src="leaflet.js"></script>
+  <script src="leaflet-src.js"></script>
+  <script src="BaseMarkerMethods.js"></script>
+  <script src="CircleMarker.Label.js"></script>
+  <script src="copyright.js"></script>
+  <script src="FeatureGroup.Label.js"></script>
+  <script src="Label.js"></script>
+  <script src="Map.Label.js"></script>
+  <script src="Marker.Label.js"></script>
+  <script src="Path.Label.js"></script>  
+  <script src="Leaflet.label.js"></script>
+  <script src="http://csmarlboro.org/agoren/web_gis/final/papaparse.min.js"></script> 
+  <script src="http://csmarlboro.org/agoren/web_gis/final/jquery-1.11.1.js"></script>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <!-- opens trails csv file -->
+  <!-- <input type="file" id="csv-file" name="http://csmarlboro.org/agoren/web_gis/final/marlboro_trails1.csv"/> --> 
+  <!-- <script src="parse_trailsData.js"></script> -->
+  <script src="draw_MarlboroMap3.js"></script>    
+  <link rel='stylesheet' href="marlboroMap_style.css">
+</head>
+<body onload="init();">
+  <div id="marlboro_map">
+  </div>
+  <footer>
+	<div>
+	<a> agoren@marlboro.edu </a> &diams; 	
+	<a rel='license' href='http://opensource.org/licenses/mit-license.php'>MIT License</a> &diams;
+	October 2014
+	</div>
+  </footer>	
+</body>
