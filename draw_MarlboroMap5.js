@@ -34,13 +34,13 @@ function convert_and_draw(results){
 
 /* for debugging purposes */
  var trail_info = {
-	'Ho Chi Minh Trail':{trail: 'Ho Chi Minh', mileage: 'mileage', description: 'Short description here.' },
-    'Lower Loop':{trail: 'Lower Loop', mileage: 'mileage', description: 'Short description here.' },
-    'Town Trail':{trail: 'Town Trail', mileage: 'mileage', description: 'Short description here.' },
-	'Ridge Trail':{trail: 'Ridge Trail', mileage: 'mileage', description: 'Short description here.' },
-	'Old Oaks Trail':{trail: 'Old Oaks Trail', mileage: 'mileage', description: 'Short description here.' },
-	'cot2oaks':{trail: '', mileage: 'mileage', description: 'Connects Cottage Land to Old Oaks Trail' },		
-	'cot2lot':{trail: '', mileage: 'mileage', description: 'Connects Cottage Land to parking lot' },			
+	'Ho Chi Minh Trail':{trail: 'Ho Chi Minh', mileage: '1.75 Miles', description: 'Ho Chi Minh Trail runs downhill from Town Trail and meets Moss Hollow Rd a short uphill walk from Marlboro College. The trail is generally has several wet patches. It is best to avoid skiing Ho Chi Minh until until these patches have frozen over.' },
+    'Lower Loop':{trail: 'Lower Loop', mileage: '2 Miles', description: 'Lower Loop runs through marked private property but this portion can be avoided (the route shown on this map) by instead taking the overgrown access road up to Musicians Way drive. Wetlands loop is accessible en-route; however, it has not been groomed in recent years and will require some bush-wacking.' },
+    'Town Trail':{trail: 'Town Trail', mileage: '1.5 Miles', description: 'As the name suggests, Town Trail connects Marlboro College to Marlboro town center. The trail has little elevation change and is good for cross country ski beginners.' },
+	'Ridge Trail':{trail: 'Ridge Trail', mileage: '0.8 Miles', description: 'Although relatively short, Ridge Trail provides access to the Stone Circle, the Observatory, and the tree house - each of which is a short detour from the main trail.' },
+	'Old Oaks Trail':{trail: 'Old Oaks Trail', mileage: '', description: 'Old Oaks Trail passes a vernal pool and a few large oak trees. The trail shown here includes a portion on Squirrel Loop (not included due to minimal maintenance on portions of the loop).' },
+	'cot2oaks':{trail: '', mileage: '', description: 'This trail is a portion of Squirrel Loop. It connects Cottage Land to Old Oaks Trail, running behind Cottage 2.' },		
+	'cot2lot':{trail: '', mileage: '', description: 'This trail connects Cottage Land to the middle parking lot.' },			
 	}; 
 
 var building_labels = {
@@ -73,21 +73,21 @@ var building_labels = {
 	'Married Student Housing': {name:'Married Student Housing', coords:[42.83869, -72.73124]},
 	'cot1':{name:'Cottage 1', coords:[42.83904, -72.72756]},
 	'cot2':{name: 'Cottage 2', coords:[42.83933, -72.72720]},
-	'cot3':{name: 'Cottage 3', coords:[42.83916, -72.72829]},
-	'cot4':{name:'Cottage 4', coords:[42.83943,-72.72802]},
+	'cot4':{name: 'Cottage 4', coords:[42.83916, -72.72829]},
+	'cot3':{name:'Cottage 3', coords:[42.83943,-72.72802]},
 	'cot5':{name:'Cottage 5', coords:[42.83746,-72.73149]},
 	'cot6':{name:'Cottage 6', coords:[42.83746,-72.73117]},
 	'cab1':{name: 'Cabin 1', coords:[42.83800,-72.72833]},
 	'cab2':{name: 'Cabin 2', coords:[42.83867, -72.72804]},
 	};
 	
-var pic_locations = {{pic: 'Ridge Trail/Stone Circle Fork',coords:[42.84572,-72.73505],url:'images/tt_stoneCirc.jpeg'},
-                     {pic:'South Pond Fork',coords:[42.85588,-72.72985],url:'images/tt_southPond.jpeg'},
-                     {pic:'End of Town Trail',coords:[42.85970,-72.72817],url:'images/tt_end.jpeg'},
-					 {pic:'Lower Loop Steps',coords:[42.83707,-72.73309],url:'images/ll_steps.jpeg'},
-					 {pic:'Lower Loop Trail Sign',coords:[42.83765,-72.73346],url:'images/ll_sign.jpeg'},
-					 {pic:'Lower Loop Private Property Fork',coords:[42.83566,-72.73954],url:'images/ll_noEnter.jpeg'},
-					 {pic:'South Pond Marlboro Residents Access Point',coords:[42.845802,-72.712984],url:'images/sp_access'},
+var pic_locations = {'rt_fork':{pic: 'Ridge Trail/Stone Circle Fork',coords:[42.84572,-72.73505],url:'images/tt_stoneCirc', burl:'images/ttB_stoneCirc'},
+                     'sp_fork':{pic:'South Pond Fork',coords:[42.85588,-72.72985],url:'images/tt_southPond', burl:'images/ttB_southPond'},
+                     'end_tt':{pic:'End of Town Trail',coords:[42.85970,-72.72817],url:'images/tt_end', burl:'images/ttB_end'},
+					 'll_step':{pic:'Lower Loop Steps',coords:[42.83707,-72.73309],url:'images/ll_steps', burl:'images/llB_steps'},
+					 'll_sign':{pic:'Lower Loop Trail Sign',coords:[42.83765,-72.73346],url:'images/ll_sign', burl:'images/llB_sign'},
+					 'll_pp':{pic:'Lower Loop Private Property Fork',coords:[42.83566,-72.73954],url:'images/ll_noEnter', burl:'images/llB_noEnter'},
+					 'sp_acc':{pic:'South Pond Marlboro Residents Access Point',coords:[42.845802,-72.712984],url:'images/sp_access', burl:'images/spB_access'},
                     }; 					 
 /*var trails_polyline;
 var line_format;
@@ -108,7 +108,7 @@ function draw_trails(trails){
     var line_format = {color: '#999999', opacity: 1.0, clickable: true, weight: 3.5, dashArray: '8,5',};
 	var circle_format = {color: 'blue', opacity:0, clickable: true, fill: 'blue', fillOpacity:0};
     var label_format = {noHide:true, offset:[0,0]}; /* add , className: "place-labels" if noHide works */
-	var pic_format = {opacity: 1.0, clickable: true};
+	var pic_format = {color: 'red', fillOpacity: 1.0, opacity: 1.0, clickable: true};
 	/* storing the trail polylines to allow changes with zoom events */
     trails_polyline = {};	
 	for (var name in trails){
@@ -140,10 +140,6 @@ function draw_trails(trails){
 	
 	var building_dots = {};
 	for (var place in building_labels){
-	    /*var label = new L.Label();
-	    label.setContent(building_labels[place].name);
-		label.setLatLng(building_labels[place].coords);
-		map.showLabel(label);*/
 		
 		var coordinates = building_labels[place].coords;
 		var building = L.circle(coordinates, 2, circle_format);
@@ -151,30 +147,20 @@ function draw_trails(trails){
 		/*var label = new L.Label();
 		label.setContent(building_labels[place].name);*/
 		building.bindPopup(building_labels[place].name, label_format).addTo(map);
-		
-		/*var building_name = building_labels[place].name
-		var coordinates = building_labels[place].coords;
-	    var building = L.marker(coordinates, {opacity: 0.5});*/
-		/*var label = new L.Label();*/
-		/*building.bindLabel('label').addTo(map);*/
-		/*var label = new L.Label();
-		label.setContent(building_labels[place]);*/
-		/*label.setLatLng(coordinates);*/
-		/*building.bindLabel(building_name, */
-			/*{nohide: true, className: "building-labels", offset: [0,0], */
-		/*}); */
-		/*map.bindLabel(label);*/
-		/*map.showLabel(label);	 */
-        /*building.bindLabel(label).addTo(map);	*/	
+	
 	};
+	
     /* adds clickable markers with trail picture pop-ups */
-    for(var pic in pic_locations){
-        var trail_pic = new L.circleMarker(pic_format);	
-	    var coords = pic_locations[pic].coords;
+    for(var picture in pic_locations){
+        var trail_pic = new L.circleMarker();	
+	    var coords = pic_locations[picture].coords;
+		var pic_name = pic_locations[picture].pic;
+		var pic_url = pic_locations[picture].url;
+		var pic_big = pic_locations[picture].burl;
         trail_pic.setLatLng(coords);
-        trail_pic.setRadius(2);
-        		
-    	trail_pic.bindPopup(pic_filler).addTo(map);	
+        trail_pic.setRadius(3.5);
+        pic_filler = "<h2>" + pic_name + "</h2>"+ "<a href=" + pic_big + ".JPG , target=_blank><img src=" + pic_url + ".JPG /></a>";		
+    	trail_pic.bindPopup(pic_filler, pic_format, keepInView = true).addTo(map);	
     };	
 	
 	/* zoom event changes line and dash width as well as visibility of building markers */
@@ -185,8 +171,6 @@ function draw_trails(trails){
 		    var line = trails_polyline[name];
 			if(zoom === 13){
 			    line.setStyle({weight:3.5, dashArray: '8,5'});
-			    /*weight = 3.5; */
-				/*alert('zoom is' + zoom 'and weight is' + weight);*/
 			};
 			if(zoom === 14){
 			    line.setStyle({weight:4.0, dashArray: '9,6'});
@@ -201,7 +185,7 @@ function draw_trails(trails){
 			    line.setStyle({weight:6.0, dashArray: '10,7'});
 			};
 			if(zoom === 18){
-			    line.setStyle({weight:7.5, dashArray: '10,7'});
+			    line.setStyle({weight:7.5, dashArray: '10,8'});
 			};
 		};
 		for (var building in building_dots){
@@ -213,18 +197,6 @@ function draw_trails(trails){
 			    circle.setStyle({opacity:0, clickable:false, fillOpacity:0});
 			};
 		};
-	    /*for (var place in building_labels){
-	        var label = new L.Label();
-	        label.setContent(building_labels[place].name);
-		    label.setLatLng(building_labels[place].coords);
-			if(zoom === 18){
-		        map.showLabel(label);
-			}
-			else{
-			    map.hideLabel();
-			};
-		};	*/
-  
 		/*alert('zoom is' + zoom);*/
 	});
 	
