@@ -29,7 +29,8 @@ body {
   margin: 10px;
 }
 
-.building-labels {
+.place-labels{
     position: absolute;
     background-color: white;
+	border: white;
 }

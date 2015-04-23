@@ -6,6 +6,8 @@
  *  a map of the Marlboro trail system and make 
  *  it interactive
  * 
+ *  this version includes Jim's 'zoomend' test and notes 
+ *
  *  By Anna Goren, with editing assistance from Jim Mahoney
  *  March 2015 | MIT License
  ********************************************/
