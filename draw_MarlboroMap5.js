@@ -9,16 +9,16 @@
  *  By Anna Goren, with editing assistance from Jim Mahoney
  *  March 2015 | MIT License
  ********************************************/
- /* use circle rather than marker for buildings */
- /* git problem solver: $ export GIT_SSH=/usr/bin/ssh.exe */
+
  
 /* debugging */
-var trails; 
+/* var trails; */ 
 /* var name; */
-/* Convert Papa.parse cvs result and call draw_trails to render it. */
+
+/* Convert Papa.parse cvs result and call draw_trails to render it on map */
 function convert_and_draw(results){
-    var data = results.data; /* in form [{'X':-72,'Y':42,'id':8982,'name':'TT'}] */
-    trails = {};
+    var data = results.data; /* in form [{'X':-72,'Y':42,'id':8982,'name':'Town Trail'}] */
+    var trails = {};
     for (var i=0; i < data.length; i++){   
 	    var line = data[i];        
 	    var trailname = line.name; 
@@ -32,14 +32,15 @@ function convert_and_draw(results){
     draw_trails(trails);
 }
 
-/* for debugging purposes */
+/* setting object lists as global variables for debugging purposes */
+/* works the same when these variables are included in the draw_trails function */
  var trail_info = {
 	'Ho Chi Minh Trail':{trail: 'Ho Chi Minh', mileage: '1.75 Miles', description: 'Ho Chi Minh Trail runs downhill from Town Trail and meets Moss Hollow Rd a short uphill walk from Marlboro College. The trail is generally has several wet patches. It is best to avoid skiing Ho Chi Minh until until these patches have frozen over.' },
     'Lower Loop':{trail: 'Lower Loop', mileage: '2 Miles', description: 'Lower Loop runs through marked private property but this portion can be avoided (the route shown on this map) by instead taking the overgrown access road up to Musicians Way drive. Wetlands loop is accessible en-route; however, it has not been groomed in recent years and will require some bush-wacking.' },
     'Town Trail':{trail: 'Town Trail', mileage: '1.5 Miles', description: 'As the name suggests, Town Trail connects Marlboro College to Marlboro town center. The trail has little elevation change and is good for cross country ski beginners.' },
 	'Ridge Trail':{trail: 'Ridge Trail', mileage: '0.8 Miles', description: 'Although relatively short, Ridge Trail provides access to the Stone Circle, the Observatory, and the tree house - each of which is a short detour from the main trail.' },
 	'Old Oaks Trail':{trail: 'Old Oaks Trail', mileage: '', description: 'Old Oaks Trail passes a vernal pool and a few large oak trees. The trail shown here includes a portion on Squirrel Loop (not included due to minimal maintenance on portions of the loop).' },
-	'cot2oaks':{trail: '', mileage: '', description: 'This trail is a portion of Squirrel Loop. It connects Cottage Land to Old Oaks Trail, running behind Cottage 2.' },		
+	'cot2oaks':{trail: '', mileage: '', description: 'This trail is a portion of Squirrel Loop. It connects Cottage Land to Old Oaks Trail.' },		
 	'cot2lot':{trail: '', mileage: '', description: 'This trail connects Cottage Land to the middle parking lot.' },			
 	}; 
 
@@ -89,15 +90,16 @@ var pic_locations = {'rt_fork':{pic: 'Ridge Trail/Stone Circle Fork',coords:[42.
 					 'll_pp':{pic:'Lower Loop Private Property Fork',coords:[42.83566,-72.73954],url:'images/ll_noEnter', burl:'images/llB_noEnter'},
 					 'sp_acc':{pic:'South Pond Marlboro Residents Access Point',coords:[42.845802,-72.712984],url:'images/sp_access', burl:'images/spB_access'},
                     }; 					 
-/*var trails_polyline;
-var line_format;
-var weight;*/
+
+/*for debugging*/					
+/*var trails_polyline;*/
+/*var line_format;*/
 /*var building;*/
 	
 /* Renders Marlboro map and draws interactive trails, building labels and picture pop-ups */
 function draw_trails(trails){
-    /*L.mapbox.accessToken = 'pk.eyJ1IjoiYWdvcmVuIiwiYSI6IlZVOFNYZmMifQ.eZrLlPh-oui4lDhkEfCNYw';*/
     var map = L.map('marlboro_map').setView([42.8388, -72.7340], 13);
+	/*calls in personalized Mapbox map and restricts zoom-out*/
     L.tileLayer(
 	    'https://{s}.tiles.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={token}',
         {attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -105,14 +107,16 @@ function draw_trails(trails){
 		token: 'pk.eyJ1IjoiYWdvcmVuIiwiYSI6IlZVOFNYZmMifQ.eZrLlPh-oui4lDhkEfCNYw',
 		mapId: 'agoren.ll46lblc',
         minZoom: 13, }).addTo(map);
+	/*setting formatting variable to be called later*/	
     var line_format = {color: '#999999', opacity: 1.0, clickable: true, weight: 3.5, dashArray: '8,5',};
 	var circle_format = {color: 'blue', opacity:0, clickable: true, fill: 'blue', fillOpacity:0};
-    var label_format = {noHide:true, offset:[0,0]}; /* add , className: "place-labels" if noHide works */
-	var pic_format = {color: 'red', fillOpacity: 1.0, opacity: 1.0, clickable: true};
+    var label_format = {noHide:true, offset:[0,0]}; /* noHide doesn't work (as of yet) for polygon/circle features */
+	var pic_format = {color: 'red', fillOpacity: 1.0, opacity: 1.0, clickable: true}; /*isn't actually changing the circle color*/
+	
 	/* storing the trail polylines to allow changes with zoom events */
-    trails_polyline = {};	
+    trails_polyline = {};
+    /* drawing trails and making them interactive */	
 	for (var name in trails){
-	    /*if (!trails.hasOwnProperty(trailname)){ continue; } */
 	    var polyline = L.polyline(trails[name], line_format).addTo(map);
 	    /* increase line transparency on scroll-over*/
 		trails_polyline[name] = polyline;
@@ -121,7 +125,7 @@ function draw_trails(trails){
 	    /* reset transparency on scroll-out*/ 		
 	    polyline.on('mouseout',    
 		    function scrollOut(e){e.target.setStyle({opacity: 1.0})});	
-	    /* binds a click-automated pop-up to the trails that have a mileage and description */
+	    /* binds a click-automated pop-up to the trails with trail mileage and description */
 	    var tName = trail_info[name].trail;
 	    var tMile = trail_info[name].mileage;
 	    var tDescrip = trail_info[name].description;
@@ -129,28 +133,26 @@ function draw_trails(trails){
 	    polyline.bindPopup(tInfo);
 	    /* binds a scrollover popup to trails */
 	    polyline.bindLabel(tName);
-		/* static building labels */
       }; 
 	
-	/*test label
-	var label = new L.Label();
+	/*test label*/
+	/*var label = new L.Label();
 	label.setContent(building_labels.Dalrymple.name);
 	label.setLatLng(building_labels.Dalrymple.coords);
 	map.showLabel(label);*/
 	
+	/*places circle at each building, shows building name when clicked */
 	var building_dots = {};
 	for (var place in building_labels){
-		
 		var coordinates = building_labels[place].coords;
 		var building = L.circle(coordinates, 2, circle_format);
 		building_dots[place] = building;
-		/*var label = new L.Label();
-		label.setContent(building_labels[place].name);*/
 		building.bindPopup(building_labels[place].name, label_format).addTo(map);
 	
 	};
 	
     /* adds clickable markers with trail picture pop-ups */
+	var pic_markers = {};
     for(var picture in pic_locations){
         var trail_pic = new L.circleMarker();	
 	    var coords = pic_locations[picture].coords;
@@ -159,6 +161,7 @@ function draw_trails(trails){
 		var pic_big = pic_locations[picture].burl;
         trail_pic.setLatLng(coords);
         trail_pic.setRadius(3.5);
+		pic_markers[picture] = trail_pic;
         pic_filler = "<h2>" + pic_name + "</h2>"+ "<a href=" + pic_big + ".JPG , target=_blank><img src=" + pic_url + ".JPG /></a>";		
     	trail_pic.bindPopup(pic_filler, pic_format, keepInView = true).addTo(map);	
     };	
@@ -166,7 +169,6 @@ function draw_trails(trails){
 	/* zoom event changes line and dash width as well as visibility of building markers */
 	map.on('zoomend', function(e){
 	    var zoom = map.getZoom();
-		/*weight = line_format.weight;*/
 		for (var name in trails_polyline){
 		    var line = trails_polyline[name];
 			if(zoom === 13){
@@ -197,14 +199,30 @@ function draw_trails(trails){
 			    circle.setStyle({opacity:0, clickable:false, fillOpacity:0});
 			};
 		};
+		for (var pic in pic_markers){
+            var picMarker = pic_markers[pic];
+			if (zoom < 14){
+			    picMarker.setRadius(3.5);
+			};
+			if (zoom === 15){
+			    picMarker.setRadius(4);
+			};
+			if (zoom === 16){
+			    picMarker.setRadius(5);
+			};
+			if (zoom > 16){
+			    picMarker.setRadius(6.5);
+			};
+        };		
+		/*for debugging purposes - to make sure zoomend is triggering at each zoom*/
 		/*alert('zoom is' + zoom);*/
 	});
 	
 
 }
 
-/* calls data into Papa Parse, runs when the page loads, 
-   calls function to draw interactive map*/
+/* calls data into Papa Parse, runs when the page loads, */ 
+/*   calls function to draw interactive map */
 function init(){
     Papa.parse('marlboroTrails2.csv',
 	    { download: true, 
