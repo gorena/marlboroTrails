@@ -12,13 +12,13 @@
 
  
 /* debugging */
-/* var trails; */ 
+var trails;  
 /* var name; */
 
-/* Convert Papa.parse cvs result and call draw_trails to render it on map */
+/* Converts Papa.parse cvs result and call draw_trails to render it on map */
 function convert_and_draw(results){
     var data = results.data; /* in form [{'X':-72,'Y':42,'id':8982,'name':'Town Trail'}] */
-    var trails = {};
+    trails = {};
     for (var i=0; i < data.length; i++){   
 	    var line = data[i];        
 	    var trailname = line.name; 
@@ -35,13 +35,15 @@ function convert_and_draw(results){
 /* setting object lists as global variables for debugging purposes */
 /* works the same when these variables are included in the draw_trails function */
  var trail_info = {
-	'Ho Chi Minh Trail':{trail: 'Ho Chi Minh', mileage: '1.75 Miles', description: 'Ho Chi Minh Trail runs downhill from Town Trail and meets Moss Hollow Rd a short uphill walk from Marlboro College. The trail is generally has several wet patches. It is best to avoid skiing Ho Chi Minh until until these patches have frozen over.' },
-    'Lower Loop':{trail: 'Lower Loop', mileage: '2 Miles', description: 'Lower Loop runs through marked private property but this portion can be avoided (the route shown on this map) by instead taking the overgrown access road up to Musicians Way drive. Wetlands loop is accessible en-route; however, it has not been groomed in recent years and will require some bush-wacking.' },
+	'Ho Chi Minh Trail':{trail: 'Ho Chi Minh', mileage: '1.75 Miles', description: 'Ho Chi Minh Trail runs downhill from Town Trail and meets Moss Hollow Rd a short uphill walk from Marlboro College. The trail is generally has several wet patches and it is best to avoid skiing Ho Chi Minh until until these patches have frozen over.' },
+    'Lower Loop':{trail: 'Lower Loop', mileage: '2 Miles', description: 'Lower Loop runs through private property but this portion can be avoided (the route shown on this map) by taking the access road up to Musicians\' Way drive. Wetlands Loop is accessible en-route; however, it has not been groomed in recent years and will require some bush-whacking.' },
     'Town Trail':{trail: 'Town Trail', mileage: '1.5 Miles', description: 'As the name suggests, Town Trail connects Marlboro College to Marlboro town center. The trail has little elevation change and is good for cross country ski beginners.' },
 	'Ridge Trail':{trail: 'Ridge Trail', mileage: '0.8 Miles', description: 'Although relatively short, Ridge Trail provides access to the Stone Circle, the Observatory, and the tree house - each of which is a short detour from the main trail.' },
-	'Old Oaks Trail':{trail: 'Old Oaks Trail', mileage: '', description: 'Old Oaks Trail passes a vernal pool and a few large oak trees. The trail shown here includes a portion on Squirrel Loop (not included due to minimal maintenance on portions of the loop).' },
-	'cot2oaks':{trail: '', mileage: '', description: 'This trail is a portion of Squirrel Loop. It connects Cottage Land to Old Oaks Trail.' },		
+	'Old Oaks Trail':{trail: 'Old Oaks Trail', mileage: '', description: 'Old Oaks Trail passes a vernal pool and large oak trees. The trail shown here includes a portion on Squirrel Loop (not shown on map).' },
+	'cot2oaks':{trail: '', mileage: '', description: 'This trail is a portion of Squirrel Loop (not shown on map). It connects Cottage Land to Old Oaks Trail.' },		
 	'cot2lot':{trail: '', mileage: '', description: 'This trail connects Cottage Land to the middle parking lot.' },			
+	'South Pond Loop':{trail:'South Pond Loop', mileage:'',description:'South Pond Loop runs from cottage land to Town Trail. Since this trail crosses through private property, it is not open to non-Marlboro residents. In the winter, South Pond Loop is regularly groomed for cross country skiing.'},
+	'South Pond XC':{trail:'South Pond Cross Country Ski Detour', mileage:'', description:'In the winter, the groomed ski loop runs accross South Pond.'}, 
 	}; 
 
 var building_labels = {
@@ -80,6 +82,7 @@ var building_labels = {
 	'cot6':{name:'Cottage 6', coords:[42.83746,-72.73117]},
 	'cab1':{name: 'Cabin 1', coords:[42.83800,-72.72833]},
 	'cab2':{name: 'Cabin 2', coords:[42.83867, -72.72804]},
+	'soccer':{name: 'Soccer Field', coords:[42.83915,-72.73289]},
 	};
 	
 var pic_locations = {'rt_fork':{pic: 'Ridge Trail/Stone Circle Fork',coords:[42.84572,-72.73505],url:'images/tt_stoneCirc', burl:'images/ttB_stoneCirc'},
@@ -192,7 +195,7 @@ function draw_trails(trails){
 		};
 		for (var building in building_dots){
 		    var circle = building_dots[building];
-		    if (zoom === 18){
+		    if (zoom > 16){
 			    circle.setStyle({opacity:1.0, clickable:true, fillOpacity:1.0});
 			}
 			else{
@@ -224,7 +227,7 @@ function draw_trails(trails){
 /* calls data into Papa Parse, runs when the page loads, */ 
 /*   calls function to draw interactive map */
 function init(){
-    Papa.parse('marlboroTrails2.csv',
+    Papa.parse('marlboroTrails3.csv',
 	    { download: true, 
 		header: true, 
 		dynamicTyping: true,

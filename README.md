@@ -19,8 +19,8 @@ and  marlboroMap_style.css (Cascading style-sheet) files in addition to:
 3. papaparse.min.js - parses the csv files allowing them to be put into a usable format
 	 
 The images included on the web-page can be found within the images file. 
-The marlboroTrails.csv is an earlier version of the trails coordinates csv file;
-the marlboroTrails2.csv is the final version for the web-page. 
+The marlboroTrails.csv and marlboroTrails2.csv files are earlier versions of the trail 
+coordinates csv's; the marlboroTrails3.csv is the final version for the web-page. 
 
 Sources:
 Discussing issue of pop-ups being cut off by map bounds:
